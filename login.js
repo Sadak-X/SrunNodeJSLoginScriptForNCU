@@ -5,9 +5,9 @@ const fs = require('fs');
 const path = require('path');
 
 // Configuration file paths
-const CONFIG_DIR = process.platform === 'win32' ? 'C:\\etc' : '/etc';
+const CONFIG_DIR = process.platform === 'win32' ? 'C:\\etc' : './etc';
 const CONFIG_FILE = path.join(CONFIG_DIR, 'srun_login.conf');
-const LOG_DIR = process.platform === 'win32' ? 'C:\\logs' : '/var/log';
+const LOG_DIR = process.platform === 'win32' ? 'C:\\logs' : './log';
 const LOG_FILE = path.join(LOG_DIR, 'srun_login.log');
 
 // Default configuration with validation rules
@@ -181,7 +181,7 @@ function getUserConfig() {
         } else if (choice === '2') {
             location = 'dormitory';
             login_host = LOCATIONS.dormitory.login_host;
-            
+
             // Only ask for network type in dormitory area
             console.log('\nSelect your campus network type:');
             const networkTypes = ['cmcc', 'ndcard', 'unicom', 'ncu'];
@@ -412,7 +412,7 @@ async function getLoginParams() {
         const params = Object.fromEntries(url.searchParams);
 
         // Get ac_id
-        const acid = params.ac_id || '39';
+        const acid = params.ac_id || (config.location === 'teaching' ? '39' : '5');
 
         // Get user_ip
         const match = response.data.match(/<input type="hidden" name="user_ip" id="user_ip" value="([^"]+)"/);
@@ -507,7 +507,7 @@ async function login() {
 
         const loginRes = await axios.get(loginUrl, { params });
         log('Login result: ' + JSON.stringify(loginRes.data));
-        return loginRes.data.error === 'ok' || loginRes.data.error_msg ==='E2620: You are already online.';
+        return loginRes.data.error === 'ok' || loginRes.data.error_msg === 'E2620: You are already online.';
 
     } catch (error) {
         log('Login failed: ' + error.message, true);
