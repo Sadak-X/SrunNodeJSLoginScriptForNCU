@@ -1,5 +1,7 @@
 # SrunNodeJSLoginScriptForNCU
 
+本项目已停止更新，请关注[SrunGO](https://github.com/Sadak-X/SrunGO)
+
  NCU深澜校园网node.js登录脚本
 
 ## 使用方法
